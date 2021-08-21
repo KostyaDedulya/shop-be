@@ -1,13 +1,11 @@
 import { data } from '../data';
 import 'source-map-support/register';
 
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
-import { formatJSONResponse } from '@libs/apiGateway';
-import { middyfy } from '@libs/lambda';
+import { formatJSONResponse } from '../../libs/apiGateway';
+import { middyfy } from '../../libs/lambda';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
-import schema from './schema';
-
-const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async () => {
+export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
   return formatJSONResponse({
     data,
   });
