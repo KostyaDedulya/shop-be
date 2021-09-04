@@ -34,7 +34,7 @@ export const postProductToRDS = async (event: HttpEventPostRequest<BodyRequest>)
 
   const { title, description, price, count } = event.body;
 
-  if (!title || !description || !price || !count) return responseBadRequest();
+  if (!title || !description || !price || !count || count < 0 || price < 0) return responseBadRequest();
 
   try {
     await client.connect();
@@ -43,6 +43,7 @@ export const postProductToRDS = async (event: HttpEventPostRequest<BodyRequest>)
   }
 
   try {
+    await client.query('BEGIN');
     const car = await client.query({
       text: `
         insert into products (title, description, price) values
@@ -60,9 +61,11 @@ export const postProductToRDS = async (event: HttpEventPostRequest<BodyRequest>)
       `,
       values:[carId, count]
     });
+    await client.query('COMMIT');
     car.rows[0].count = stock.rows[0].count;
     return formatJSONResponse(car.rows);
   } catch (e) {
+    await client.query('ROLLBACK');
     return responseInternalError();
   } finally {
     client.end();
