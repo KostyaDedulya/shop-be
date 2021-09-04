@@ -25,7 +25,7 @@ export const getProductByIdFromRDS = async (event: HttpEventRequest<{ id: string
   const { id } = event.pathParameters;
   const client = new Client(DBOptions);
 
-  console.log('getProductById')
+  console.log(`getProductById, method: ${event.httpMethod}, id: ${id}`)
 
   if(!checkUUID(id)) return responseBadRequest();
 
@@ -36,12 +36,16 @@ export const getProductByIdFromRDS = async (event: HttpEventRequest<{ id: string
   }
 
   try {
-    const data = await client.query(`
-      select id, title, description, s.count, price from products p 
-        inner join stocks s on p.id = s.product_id
-        where id = ${id}
-    `)
-    if (data.rows.length === 0) throw new Error();
+    const data = await client.query({
+      text: `
+        select id, title, description, s.count, price from products p 
+          inner join stocks s on p.id = s.product_id
+          where id = $1
+      `,
+      values:[id]
+    });
+    console.log(data.rows);
+    if (data.rows.length < 1) throw new Error();
     return formatJSONResponse({
       data: data.rows[0],
     });
@@ -52,6 +56,8 @@ export const getProductByIdFromRDS = async (event: HttpEventRequest<{ id: string
       },
       404
     );
+  } finally {
+    client.end();
   }
 };
 
