@@ -8,6 +8,18 @@ export type HttpEventRequest<T = null> = Omit<APIGatewayProxyEvent, 'pathParamet
   pathParameters: T;
 };
 
+export const responseInternalError = () => {
+  return formatJSONResponse({
+    errorMessage: "Internal error"
+  }, 500)
+}
+
+export const responseBadRequest = (msg: string = 'Invalid request') => {
+  return formatJSONResponse({
+    errorMessage: msg
+  }, 400)
+}
+
 export const formatJSONResponse = (response: Record<string, unknown>, statusCode = 200) => {
   return {
     statusCode,

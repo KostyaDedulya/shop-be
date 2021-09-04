@@ -3,7 +3,7 @@ export const data = [
     count: 4,
     description: 'Bentley',
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80aa',
-    price: 2.4,
+    price: 24,
     title: 'Bentley',
   },
   {
