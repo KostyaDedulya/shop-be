@@ -8,6 +8,10 @@ export type HttpEventRequest<T = null> = Omit<APIGatewayProxyEvent, 'pathParamet
   pathParameters: T;
 };
 
+export type HttpEventPostRequest<T = null> = Omit<APIGatewayProxyEvent, 'body'> & {
+  body: T;
+};
+
 export const responseInternalError = () => {
   return formatJSONResponse({
     errorMessage: "Internal error"
