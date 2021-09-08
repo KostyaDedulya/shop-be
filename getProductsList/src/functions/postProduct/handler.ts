@@ -27,7 +27,7 @@ const DBOptions: ClientConfig = {
   connectionTimeoutMillis: 5000,
 }
 
-export const postProductToRDS = async (event: HttpEventPostRequest<BodyRequest>): Promise<APIGatewayProxyResult> => {
+export const postProduct = async (event: HttpEventPostRequest<BodyRequest>): Promise<APIGatewayProxyResult> => {
   console.log(`postProductToRDS, method: ${event.httpMethod}, body: ${JSON.stringify(event.body)}`);
 
   const client = new Client(DBOptions);
@@ -72,4 +72,4 @@ export const postProductToRDS = async (event: HttpEventPostRequest<BodyRequest>)
   }
 };
 
-export const main = middyfy(postProductToRDS);
+export const main = middyfy(postProduct);

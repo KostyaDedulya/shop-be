@@ -2,9 +2,7 @@ import type { AWS } from '@serverless/typescript';
 
 import getProductsList from '@functions/getProductsList';
 import getProductsById from '@functions/getProductById';
-import getProductsListFromRDS from '@functions/getProductsListFromRDS'
-import getProductByIdFromRDS from "@functions/getProductByIdFromRDS";
-import postProductToRDS from "@functions/postProduct";
+import postProduct from "@functions/postProduct";
 
 const serverlessConfiguration: AWS = {
   service: 'getproductslist',
@@ -36,7 +34,7 @@ const serverlessConfiguration: AWS = {
   },
   useDotenv: true,
   // import the function via paths
-  functions: { getProductsList, getProductsById, getProductsListFromRDS, getProductByIdFromRDS, postProductToRDS },
+  functions: { getProductsList, getProductsById, postProduct },
 };
 
 module.exports = serverlessConfiguration;

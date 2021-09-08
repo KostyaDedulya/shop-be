@@ -6,7 +6,7 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'products/sql/',
+        path: 'products/',
         cors: true,
       },
     },
