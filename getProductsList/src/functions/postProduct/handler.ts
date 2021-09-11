@@ -4,27 +4,14 @@ import type { HttpEventPostRequest } from '../../libs/apiGateway';
 import {formatJSONResponse, responseBadRequest, responseInternalError} from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { Client, ClientConfig } from 'pg';
+import { Client } from 'pg';
+import {DBOptions} from "../../config/dbconfig";
 
 interface BodyRequest {
   title: string;
   description: string;
   price: number;
   count: number;
-}
-
-const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
-
-const DBOptions: ClientConfig = {
-  host: PG_HOST,
-  port: Number(PG_PORT),
-  database: PG_DATABASE,
-  user: PG_USERNAME,
-  password: PG_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeoutMillis: 5000,
 }
 
 export const postProduct = async (event: HttpEventPostRequest<BodyRequest>): Promise<APIGatewayProxyResult> => {

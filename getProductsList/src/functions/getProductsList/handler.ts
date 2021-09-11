@@ -1,23 +1,12 @@
 import 'source-map-support/register';
-import {Client, ClientConfig} from 'pg';
 
+import { Client } from 'pg';
 import {formatJSONResponse, responseInternalError} from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+import {DBOptions} from "../../config/dbconfig";
 
-const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
 
-const DBOptions: ClientConfig = {
-  host: PG_HOST,
-  port: Number(PG_PORT),
-  database: PG_DATABASE,
-  user: PG_USERNAME,
-  password: PG_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeoutMillis: 5000,
-}
 
 export const getProductsListFromRDS = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   console.log(`getProductsListFromRDS, method: ${event.httpMethod}`);
@@ -39,9 +28,7 @@ export const getProductsListFromRDS = async (event: APIGatewayProxyEvent): Promi
       data: data.rows
     });
   } catch (e) {
-    return formatJSONResponse({
-      errorMessage: 'Something gone wrong'
-    }, 400);
+    return responseInternalError();
   } finally {
     client.end();
   }

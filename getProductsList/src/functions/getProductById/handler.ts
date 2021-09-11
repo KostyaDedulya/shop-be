@@ -4,22 +4,10 @@ import type { HttpEventRequest } from '../../libs/apiGateway';
 import {formatJSONResponse, responseBadRequest, responseInternalError} from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { Client, ClientConfig } from 'pg';
+import { Client } from 'pg';
 import {checkUUID} from "../../utils/checkUUID";
+import {DBOptions} from "../../config/dbconfig";
 
-const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
-
-const DBOptions: ClientConfig = {
-  host: PG_HOST,
-  port: Number(PG_PORT),
-  database: PG_DATABASE,
-  user: PG_USERNAME,
-  password: PG_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeoutMillis: 5000,
-}
 
 export const getProductByIdFromRDS = async (event: HttpEventRequest<{ id: string }>): Promise<APIGatewayProxyResult> => {
   const { id } = event.pathParameters;
@@ -38,24 +26,26 @@ export const getProductByIdFromRDS = async (event: HttpEventRequest<{ id: string
   try {
     const data = await client.query({
       text: `
-        select id, title, description, s.count, price from products p 
+        select id, title, description, s.count, price from products p
           inner join stocks s on p.id = s.product_id
           where id = $1
       `,
       values:[id]
     });
     console.log(data.rows);
-    if (data.rows.length < 1) throw new Error();
+    if (data.rows.length < 1) {
+      return formatJSONResponse(
+        {
+          errorMessage: 'Product not found',
+        },
+        404
+      );
+    }
     return formatJSONResponse({
       data: data.rows[0],
     });
   } catch (e) {
-    return formatJSONResponse(
-      {
-        errorMessage: 'Product not found',
-      },
-      404
-    );
+    return responseInternalError();
   } finally {
     client.end();
   }
