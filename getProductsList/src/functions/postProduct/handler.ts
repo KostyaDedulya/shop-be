@@ -1,11 +1,11 @@
 import 'source-map-support/register';
 
 import type { HttpEventPostRequest } from '../../libs/apiGateway';
-import {formatJSONResponse, responseBadRequest, responseInternalError} from '../../libs/apiGateway';
+import { formatJSONResponse, responseBadRequest, responseInternalError } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { Client } from 'pg';
-import {DBOptions} from "../../config/dbconfig";
+import { DBOptions } from '../../config/dbconfig';
 
 interface BodyRequest {
   title: string;
@@ -37,7 +37,7 @@ export const postProduct = async (event: HttpEventPostRequest<BodyRequest>): Pro
             ($1, $2, $3)
             returning *
       `,
-      values:[title, description, price]
+      values: [title, description, price],
     });
     const carId = car.rows[0].id;
     const stock = await client.query({
@@ -46,7 +46,7 @@ export const postProduct = async (event: HttpEventPostRequest<BodyRequest>): Pro
             ($1, $2)
             returning *
       `,
-      values:[carId, count]
+      values: [carId, count],
     });
     await client.query('COMMIT');
     car.rows[0].count = stock.rows[0].count;
