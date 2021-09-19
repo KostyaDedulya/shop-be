@@ -12,13 +12,8 @@ const CATALOG_PATH = 'uploaded';
 const BUCKET_NAME = 'imported-products-files';
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async event => {
-  const { queryStringParameters } = event;
-  if (!queryStringParameters) return responseBadRequest();
-
-  const { name } = queryStringParameters;
+  const { name } = event?.queryStringParameters;
   if (!name) return responseBadRequest();
-
-  console.log(name);
 
   const s3 = new S3({ region: 'eu-west-1' });
   let url;
