@@ -1,17 +1,14 @@
 import 'source-map-support/register';
 
 import { S3 } from 'aws-sdk';
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
-import { formatJSONResponse, responseBadRequest, responseInternalError } from '@libs/apiGateway';
-import { middyfy } from '@libs/lambda';
-
-import schema from './schema';
+import { formatJSONResponse, responseBadRequest, responseInternalError } from '../../libs/apiGateway';
+import { middyfy } from '../../libs/lambda';
 
 const CATALOG_PATH = 'uploaded';
 
 const BUCKET_NAME = 'imported-products-files';
 
-const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async event => {
+export const importProductsFile = async event => {
   const { name } = event?.queryStringParameters;
   if (!name) return responseBadRequest();
 
@@ -25,7 +22,6 @@ const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = as
 
   try {
     url = s3.getSignedUrl('putObject', params);
-    console.log(url);
   } catch (e) {
     return responseInternalError();
   }

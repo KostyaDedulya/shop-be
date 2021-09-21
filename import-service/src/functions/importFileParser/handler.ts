@@ -6,8 +6,10 @@ import csv from 'csv-parser';
 
 import { middyfy } from '@libs/lambda';
 import { formatJSONResponse, responseInternalError } from '@libs/apiGateway';
-// const CATALOG_PATH = 'uploaded';
-//
+
+const CATALOG_PATH_UPLOADED = 'uploaded';
+const CATALOG_PATH_PARSED = 'parsed';
+
 const BUCKET_NAME = 'imported-products-files';
 
 const importFileParser = async (event: S3Event) => {
@@ -35,7 +37,7 @@ const importFileParser = async (event: S3Event) => {
         .copyObject({
           Bucket: BUCKET_NAME,
           CopySource: `${BUCKET_NAME}/${record.s3.object.key}`,
-          Key: record.s3.object.key.replace('uploaded', 'parsed'),
+          Key: record.s3.object.key.replace(CATALOG_PATH_UPLOADED, CATALOG_PATH_PARSED),
         })
         .promise();
 
