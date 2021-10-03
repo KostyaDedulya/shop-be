@@ -23,6 +23,7 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: { 'Fn::ImportValue': 'catalogItemsQueueURL' },
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -35,6 +36,15 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: ['s3:*'],
         Resource: 'arn:aws:s3:::imported-products-files/*',
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sqs:*'],
+        Resource: [
+          {
+            'Fn::ImportValue': 'catalogItemsQueueArn',
+          },
+        ],
       },
     ],
   },

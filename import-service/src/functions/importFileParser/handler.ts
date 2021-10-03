@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 
-import { S3 } from 'aws-sdk';
+import { S3, SQS } from 'aws-sdk';
 import { S3Event } from 'aws-lambda';
 import csv from 'csv-parser';
 
@@ -14,6 +14,22 @@ const BUCKET_NAME = 'imported-products-files';
 
 const importFileParser = async (event: S3Event) => {
   const s3 = new S3({ region: 'eu-west-1' });
+  const sqs = new SQS({ region: 'eu-west-1' });
+
+  const sentToSQS = async (data: string) => {
+    try {
+      console.log('Start to sent data to queue');
+      const response = await sqs
+        .sendMessage({
+          QueueUrl: process.env.SQS_URL,
+          MessageBody: JSON.stringify(data),
+        })
+        .promise();
+      console.log(`Data send to queue. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      console.log('Something gone wrong');
+    }
+  };
 
   try {
     for (const record of event.Records) {
@@ -28,6 +44,7 @@ const importFileParser = async (event: S3Event) => {
         .pipe(csv())
         .on('data', data => {
           console.log(data);
+          sentToSQS(JSON.stringify(data));
         })
         .on('error', () => {
           return responseInternalError();
