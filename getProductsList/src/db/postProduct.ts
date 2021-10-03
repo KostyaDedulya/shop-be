@@ -45,7 +45,7 @@ export async function postProductToDB(data: IProduct) {
     console.log(`${JSON.stringify(stock)} posted to db`);
     await client.query('COMMIT');
     car.rows[0].count = stock.rows[0].count;
-    console.log(`Response from DB - ${car.rows}`);
+    console.log(`Response from DB - ${JSON.stringify(car.rows)}`);
     client.end();
     return car.rows;
   } catch (e) {
