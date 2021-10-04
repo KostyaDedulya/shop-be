@@ -22,7 +22,7 @@ const importFileParser = async (event: S3Event) => {
       const response = await sqs
         .sendMessage({
           QueueUrl: process.env.SQS_URL,
-          MessageBody: JSON.stringify(data),
+          MessageBody: data,
         })
         .promise();
       console.log(`Data send to queue. Response: ${JSON.stringify(response)}`);
