@@ -1,0 +1,58 @@
+export const data = [
+  {
+    count: 4,
+    description: 'Bentley',
+    id: '7567ec4b-b10c-48c5-9345-fc73c48a80aa',
+    price: 24,
+    title: 'Bentley',
+  },
+  {
+    count: 6,
+    description: 'Ferrari',
+    id: '7567ec4b-b10c-48c5-9345-fc73c48a80a0',
+    price: 10,
+    title: 'Ferrari',
+  },
+  {
+    count: 7,
+    description: 'Rolls Royce',
+    id: '7567ec4b-b10c-48c5-9345-fc73c48a80a2',
+    price: 23,
+    title: 'Rolls Royce',
+  },
+  {
+    count: 12,
+    description: 'BMW',
+    id: '7567ec4b-b10c-48c5-9345-fc73c48a80a1',
+    price: 15,
+    title: 'BMW',
+  },
+  {
+    count: 7,
+    description: 'Mercedes',
+    id: '7567ec4b-b10c-48c5-9345-fc73c48a80a3',
+    price: 23,
+    title: 'Mercedes',
+  },
+  {
+    count: 8,
+    description: 'Audi',
+    id: '7567ec4b-b10c-48c5-9345-fc73348a80a1',
+    price: 15,
+    title: 'Audi',
+  },
+  {
+    count: 2,
+    description: 'Pagani',
+    id: '7567ec4b-b10c-48c5-9445-fc73c48a80a2',
+    price: 23,
+    title: 'Pagani',
+  },
+  {
+    count: 3,
+    description: 'Bugatti',
+    id: '7567ec4b-b10c-45c5-9345-fc73c48a80a1',
+    price: 15,
+    title: 'Bugatti',
+  },
+];
