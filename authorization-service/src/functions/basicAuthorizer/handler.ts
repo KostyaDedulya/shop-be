@@ -4,7 +4,7 @@ import { Callback, APIGatewayTokenAuthorizerEvent } from 'aws-lambda';
 import { middyfy } from '@libs/lambda';
 
 const basicAuthorizer = async (event: APIGatewayTokenAuthorizerEvent, _, cb: Callback) => {
-  console.log(`Event: ${event}`);
+  console.log(`Event: ${JSON.stringify(event)}`);
 
   if (event.type !== 'TOKEN') cb('Unauthorized');
 

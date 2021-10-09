@@ -14,6 +14,11 @@ export default {
             },
           },
         },
+        authorizer: {
+          name: 'basicAuthorizer',
+          type: 'token',
+          arn: '${self:custom.authorizerArn}',
+        },
       },
     },
   ],
