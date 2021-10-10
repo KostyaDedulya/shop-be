@@ -17,7 +17,7 @@ const basicAuthorizer = async (event: APIGatewayTokenAuthorizerEvent, _, cb: Cal
 
     console.log(`Username: ${username}, password: ${password}`);
 
-    const savedPassword = process.env.password;
+    const savedPassword = process.env.PASSWORD;
     const permission = !savedPassword || savedPassword != password ? 'Deny' : 'Allow';
 
     const policy = generatePolicy(encodedCreds, methodArn, permission);

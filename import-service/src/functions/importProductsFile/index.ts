@@ -7,6 +7,7 @@ export default {
       http: {
         method: 'get',
         path: 'import/',
+        cors: true,
         request: {
           parameters: {
             querystrings: {
@@ -18,6 +19,8 @@ export default {
           name: 'basicAuthorizer',
           type: 'token',
           arn: '${self:custom.authorizerArn}',
+          resultTtlInSeconds: 0,
+          identitySource: 'method.request.header.Authorization',
         },
       },
     },
