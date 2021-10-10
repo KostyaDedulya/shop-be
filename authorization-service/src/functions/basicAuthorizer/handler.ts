@@ -6,7 +6,7 @@ import { middyfy } from '@libs/lambda';
 const basicAuthorizer = async (event: APIGatewayTokenAuthorizerEvent, _, cb: Callback) => {
   console.log(`Event: ${JSON.stringify(event)}`);
 
-  if (event.type !== 'TOKEN') cb('Unauthorized');
+  if (event.type !== 'TOKEN' || !event.authorizationToken) cb('Unauthorized');
 
   try {
     const { authorizationToken, methodArn } = event;
@@ -14,6 +14,8 @@ const basicAuthorizer = async (event: APIGatewayTokenAuthorizerEvent, _, cb: Cal
     const buffer = Buffer.from(encodedCreds, 'base64');
     const creds = buffer.toString('utf-8').split(':');
     const [username, password] = creds;
+
+    if (!password || !username) throw new Error('Unauthorized');
 
     console.log(`Username: ${username}, password: ${password}`);
 
